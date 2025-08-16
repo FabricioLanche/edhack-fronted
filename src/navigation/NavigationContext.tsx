@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, type ReactNode } from 'react';
 
-export type RouteType = 'login' | 'home';
+export type RouteType = 'home' | 'student-auth' | 'teacher-auth' | 'biometric-login' | 'voice-registration' | 'levels';
 
 interface NavigationContextType {
   currentRoute: RouteType;
@@ -24,8 +24,8 @@ interface NavigationProviderProps {
 }
 
 export const NavigationProvider: React.FC<NavigationProviderProps> = ({ children }) => {
-  const [currentRoute, setCurrentRoute] = useState<RouteType>('login');
-  const [history, setHistory] = useState<RouteType[]>(['login']);
+  const [currentRoute, setCurrentRoute] = useState<RouteType>('home');
+  const [history, setHistory] = useState<RouteType[]>(['home']);
 
   const navigate = (route: RouteType): void => {
     setCurrentRoute(route);

@@ -1,246 +1,70 @@
-import React, { useState, type JSX } from 'react';
+import React from 'react';
+import type { ScreenProps } from '../interfaces';
 import NavigationButton from '../components/NavigationButton';
-import type { RouteType } from '../navigation/NavigationContext';
+import { useUser } from '../navigation/UserContext';
 
-type TabId = 'dashboard' | 'projects' | 'team' | 'analytics' | 'settings';
+const HomeScreen: React.FC<ScreenProps> = ({ navigate }) => {
+  const { setUserType } = useUser();
 
-interface Tab {
-  id: TabId;
-  label: string;
-  icon: string;
-}
+  const handleStudentClick = (): void => {
+    setUserType('student');
+    navigate('student-auth');
+  };
 
-interface HomeScreenProps {
-  navigate: (route: RouteType) => void;
-}
-
-interface MetricCardProps {
-  title: string;
-  value: number;
-  change: number;
-  icon: string;
-}
-
-interface ProjectCardProps {
-  name: string;
-  lastUpdate: number;
-  index: number;
-}
-
-interface TeamMemberProps {
-  name: string;
-  role: string;
-  index: number;
-}
-
-const MetricCard: React.FC<MetricCardProps> = ({ title, value, change, icon }) => (
-  <div className="bg-white p-6 rounded-lg shadow-sm border">
-    <div className="flex items-center justify-between mb-4">
-      <h3 className="text-lg font-semibold">{title}</h3>
-      <span className="text-2xl">{icon}</span>
-    </div>
-    <p className="text-3xl font-bold text-blue-600 mb-2">{value}</p>
-    <p className="text-sm text-gray-600">
-      +{change}% desde el mes pasado
-    </p>
-  </div>
-);
-
-const ProjectCard: React.FC<ProjectCardProps> = ({ name, lastUpdate }) => (
-  <div className="bg-white p-6 rounded-lg shadow-sm border">
-    <div className="flex items-center justify-between">
-      <div>
-        <h3 className="text-lg font-semibold">{name}</h3>
-        <p className="text-gray-600">Último update hace {lastUpdate} días</p>
-      </div>
-      <div className="flex space-x-2">
-        <NavigationButton variant="outline" size="sm">Ver</NavigationButton>
-        <NavigationButton variant="primary" size="sm">Editar</NavigationButton>
-      </div>
-    </div>
-  </div>
-);
-
-const TeamMember: React.FC<TeamMemberProps> = ({ name, role }) => (
-  <div className="bg-white p-6 rounded-lg shadow-sm border">
-    <div className="flex items-center space-x-4">
-      <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
-        {name.split(' ').map(n => n[0]).join('')}
-      </div>
-      <div>
-        <h3 className="text-lg font-semibold">{name}</h3>
-        <p className="text-gray-600">{role}</p>
-      </div>
-    </div>
-  </div>
-);
-
-const HomeScreen: React.FC<HomeScreenProps> = ({ navigate }) => {
-  const [activeTab, setActiveTab] = useState<TabId>('dashboard');
-
-  const tabs: Tab[] = [
-    { id: 'dashboard', label: 'Dashboard', icon: '📊' },
-    { id: 'projects', label: 'Proyectos', icon: '📁' },
-    { id: 'team', label: 'Equipo', icon: '👥' },
-    { id: 'analytics', label: 'Analíticas', icon: '📈' },
-    { id: 'settings', label: 'Configuración', icon: '⚙️' }
-  ];
-
-  const projects: string[] = ['Hackathon App', 'E-commerce Platform', 'Mobile Dashboard'];
-  const teamMembers: Array<{ name: string; role: string }> = [
-    { name: 'Ana García', role: 'Desarrollador' },
-    { name: 'Carlos López', role: 'Desarrollador' },
-    { name: 'María González', role: 'Desarrollador' },
-    { name: 'José Martín', role: 'Desarrollador' }
-  ];
-
-  const renderTabContent = (): JSX.Element => {
-    switch (activeTab) {
-      case 'dashboard':
-        return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">Dashboard Principal</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }, (_, index) => (
-                <MetricCard
-                  key={index}
-                  title={`Métricas ${index + 1}`}
-                  value={Math.floor(Math.random() * 1000)}
-                  change={Math.floor(Math.random() * 20)}
-                  icon="📊"
-                />
-              ))}
-            </div>
-          </div>
-        );
-      case 'projects':
-        return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">Mis Proyectos</h2>
-            <div className="space-y-4">
-              {projects.map((project, index) => (
-                <ProjectCard
-                  key={index}
-                  name={project}
-                  lastUpdate={Math.floor(Math.random() * 10) + 1}
-                  index={index}
-                />
-              ))}
-            </div>
-          </div>
-        );
-      case 'team':
-        return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">Mi Equipo</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {teamMembers.map((member, index) => (
-                <TeamMember
-                  key={index}
-                  name={member.name}
-                  role={member.role}
-                  index={index}
-                />
-              ))}
-            </div>
-          </div>
-        );
-      case 'analytics':
-        return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">Analíticas</h2>
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <h3 className="text-lg font-semibold mb-4">Gráfico de Rendimiento</h3>
-              <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-                <p className="text-gray-500">Gráfico placeholder - Integrar con librería de charts</p>
-              </div>
-            </div>
-          </div>
-        );
-      case 'settings':
-        return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">Configuración</h2>
-            <div className="bg-white p-6 rounded-lg shadow-sm border space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Nombre de usuario
-                </label>
-                <input
-                  type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Tu nombre"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="tu@email.com"
-                />
-              </div>
-              <NavigationButton variant="primary">
-                Guardar Cambios
-              </NavigationButton>
-            </div>
-          </div>
-        );
-      default:
-        return <div>Selecciona una pestaña</div>;
-    }
+  const handleTeacherClick = (): void => {
+    setUserType('teacher');
+    navigate('teacher-auth');
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <h1 className="text-xl font-semibold text-gray-900">
-              Mi Aplicación
-            </h1>
-            <div className="flex space-x-4">
-              <NavigationButton
-                to="login"
-                navigate={navigate}
-                variant="outline"
-                size="sm"
-              >
-                Cerrar Sesión
-              </NavigationButton>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md space-y-8 text-center">
+        {/* Logo/Icon */}
+        <div className="flex justify-center mb-8">
+          <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
           </div>
         </div>
-      </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Tabs Navigation */}
-        <div className="bg-white rounded-lg shadow-sm border mb-8">
-          <div className="border-b border-gray-200">
-            <nav className="flex space-x-8 px-6">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`py-4 px-2 border-b-2 font-medium text-sm transition-colors duration-200 ${
-                    activeTab === tab.id
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
-                >
-                  <span className="mr-2">{tab.icon}</span>
-                  {tab.label}
-                </button>
-              ))}
-            </nav>
+        {/* Title */}
+        <div className="space-y-2">
+          <h1 className="text-4xl font-bold text-gray-900">EduVoice</h1>
+          <p className="text-lg text-gray-600">Aprende con tu voz, enseña con tecnología</p>
+        </div>
+
+        {/* Demo Section */}
+        <div className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-xl font-semibold text-gray-900">Demo</h2>
+            <p className="text-gray-600">Selecciona tu perfil para comenzar</p>
           </div>
-          
-          {/* Tab Content */}
-          <div className="p-6">
-            {renderTabContent()}
+
+          <div className="space-y-4">
+            <button
+              onClick={handleStudentClick}
+              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              <div className="flex items-center justify-center gap-3">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span className="text-lg font-medium">Soy Alumno</span>
+              </div>
+            </button>
+
+            <button
+              onClick={handleTeacherClick}
+              className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white p-4 rounded-xl hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              <div className="flex items-center justify-center gap-3">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                <span className="text-lg font-medium">Soy Profesor</span>
+              </div>
+            </button>
           </div>
         </div>
       </div>

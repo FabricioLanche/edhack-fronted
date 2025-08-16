@@ -1,5 +1,5 @@
 // Navigation Types
-export type RouteType = 'login' | 'home';
+export type RouteType = 'home' | 'student-auth' | 'teacher-auth' | 'biometric-login' | 'voice-registration' | 'levels';
 
 // Component Props Types
 export interface NavigateFunction {
@@ -15,43 +15,43 @@ export interface ScreenProps {
   navigate: NavigateFunction;
 }
 
-// Form Types
-export interface LoginFormData {
+// User Types
+export type UserType = 'student' | 'teacher';
+
+export interface UserProfile {
+  id: string;
+  name: string;
   email: string;
-  password: string;
+  type: UserType;
+  hasAccount: boolean;
+  biometricData?: string; // Base64 encoded image
+  voiceProfile?: string;
+  createdAt: Date;
 }
 
-// Tab Types
-export type TabId = 'dashboard' | 'projects' | 'team' | 'analytics' | 'settings';
-
-export interface Tab {
-  id: TabId;
-  label: string;
-  icon: string;
+// Speech Recognition Types
+export interface SpeechRecognitionResult {
+  transcript: string;
+  confidence: number;
+  isFinal: boolean;
 }
 
-// Data Types
-export interface Project {
-  id: string;
-  name: string;
-  lastUpdate: number;
-  status: 'active' | 'inactive' | 'completed';
+// Camera Types
+export interface CameraProps {
+  onCapture: (imageData: string) => void;
+  onError?: (error: string) => void;
+  className?: string;
 }
 
-export interface TeamMember {
-  id: string;
-  name: string;
-  role: string;
-  avatar?: string;
-}
-
-export interface MetricData {
+// Level Types (for student progress)
+export interface Level {
   id: string;
   title: string;
-  value: number;
-  change: number;
+  description: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  isUnlocked: boolean;
+  progress: number; // 0-100
   icon: string;
-  trend: 'up' | 'down' | 'stable';
 }
 
 // Context Types
@@ -60,6 +60,16 @@ export interface NavigationContextType {
   navigate: NavigateFunction;
   goBack: () => void;
   canGoBack: boolean;
+}
+
+export interface UserContextType {
+  currentUser: UserProfile | null;
+  userType: UserType | null;
+  setUser: (user: UserProfile) => void;
+  setUserType: (type: UserType) => void;
+  logout: () => void;
+  hasAccount: boolean;
+  setHasAccount: (hasAccount: boolean) => void;
 }
 
 // Event Handler Types
