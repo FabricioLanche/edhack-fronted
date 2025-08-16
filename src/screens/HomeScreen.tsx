@@ -1,6 +1,5 @@
 import React from 'react';
 import type { ScreenProps } from '../interfaces';
-import NavigationButton from '../components/NavigationButton';
 import { useUser } from '../navigation/UserContext';
 
 const HomeScreen: React.FC<ScreenProps> = ({ navigate }) => {
@@ -14,6 +13,11 @@ const HomeScreen: React.FC<ScreenProps> = ({ navigate }) => {
   const handleTeacherClick = (): void => {
     setUserType('teacher');
     navigate('teacher-auth');
+  };
+
+  const handleDirectTeacherDashboard = (): void => {
+    setUserType('teacher');
+    navigate('teacher-dashboard');
   };
 
   return (
@@ -30,7 +34,7 @@ const HomeScreen: React.FC<ScreenProps> = ({ navigate }) => {
 
         {/* Title */}
         <div className="space-y-2">
-          <h1 className="text-4xl font-bold text-gray-900">EduVoice</h1>
+          <h1 className="text-4xl font-bold text-gray-900">Chavin IA</h1>
           <p className="text-lg text-gray-600">Aprende con tu voz, enseña con tecnología</p>
         </div>
 
@@ -65,6 +69,46 @@ const HomeScreen: React.FC<ScreenProps> = ({ navigate }) => {
                 <span className="text-lg font-medium">Soy Profesor</span>
               </div>
             </button>
+          </div>
+
+          {/* Quick Access */}
+          <div className="pt-4 border-t border-gray-200">
+            <p className="text-xs text-gray-500 mb-3 text-center">Acceso Rápido (Demo)</p>
+            <button
+              onClick={handleDirectTeacherDashboard}
+              className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white p-3 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 text-sm"
+            >
+              <div className="flex items-center justify-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <span className="font-medium">Dashboard Profesor</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Features Preview */}
+        <div className="text-center space-y-4">
+          <div className="grid grid-cols-3 gap-4 text-sm text-gray-600">
+            <div className="space-y-2">
+              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mx-auto">
+                🎤
+              </div>
+              <p>Reconocimiento<br />de Voz</p>
+            </div>
+            <div className="space-y-2">
+              <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center mx-auto">
+                📚
+              </div>
+              <p>Comprensión<br />Lectora</p>
+            </div>
+            <div className="space-y-2">
+              <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mx-auto">
+                📊
+              </div>
+              <p>Análisis de<br />Progreso</p>
+            </div>
           </div>
         </div>
       </div>

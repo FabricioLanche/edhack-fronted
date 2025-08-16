@@ -39,11 +39,6 @@ const BiometricLoginScreen: React.FC<ScreenProps> = ({ navigate }) => {
     navigate('student-auth');
   };
 
-  const handleRetry = (): void => {
-    setCapturedImage('');
-    setIsProcessing(false);
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
       <div className="max-w-md mx-auto space-y-6">

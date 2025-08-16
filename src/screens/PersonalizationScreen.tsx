@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { usePersonalization } from '../context/PersonalizationContext';
 import type { PersonalizationQuestion } from '../context/PersonalizationContext';
 import type { ScreenProps } from '../interfaces';

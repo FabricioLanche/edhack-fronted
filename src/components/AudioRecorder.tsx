@@ -104,7 +104,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   };
 
   // Simulación de transcripción - en producción integrarías con una API real
-  const mockTranscription = async (audioBlob: Blob): Promise<string> => {
+  const mockTranscription = async (_audioBlob: Blob): Promise<string> => {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve('Transcripción simulada del audio grabado');
